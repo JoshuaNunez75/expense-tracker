@@ -4,6 +4,7 @@ import { Button, Keyboard, Pressable, Text, TextInput, TouchableWithoutFeedback,
 type Expense = {
   amount: string;
   category: string;
+  note: string;
 };
 
 const CATEGORIES = ["Food", "Transport", "Fun", "Other"];
@@ -12,18 +13,21 @@ export default function Index() {
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState(CATEGORIES[0]);
   const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [note, setNote] = useState("");
 
   function addExpense() {
     if (amount.trim() === "") {
       return;
     }
-    setExpenses([...expenses, { amount, category }]);
+    setExpenses([...expenses, { amount, category, note }]);
     setAmount("");
+    setNote("");
   }
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center", padding: 20 }}>
+        <Text style={{ fontWeight: "600", marginBottom: 4 }}>Amount</Text>
         <TextInput
           placeholder="Enter an amount"
           value={amount}
@@ -32,6 +36,15 @@ export default function Index() {
           style={{ borderWidth: 1, borderColor: "#ccc", padding: 10, width: 200, marginBottom: 10 }}
         />
 
+        <Text style={{ fontWeight: "600", marginBottom: 4 }}>Note (optional)</Text>
+        <TextInput
+          placeholder="Add a note (e.g. lunch, taxi, etc.)"
+          value={note}
+          onChangeText={setNote}
+          style={{ borderWidth: 1, borderColor: "#ccc", padding: 10, width: 200, marginBottom: 10 }}
+        />
+
+        <Text style={{ fontWeight: "600", marginBottom: 4 }}>Category</Text>
         <View style={{ flexDirection: "row", marginBottom: 10 }}>
           {CATEGORIES.map((cat) => (
             <Pressable
@@ -54,7 +67,9 @@ export default function Index() {
 
         <View style={{ marginTop: 20 }}>
           {expenses.map((expense, index) => (
-            <Text key={index}>${expense.amount} - {expense.category}</Text>
+            <Text key={index}>
+              ${expense.amount} - {expense.category}{expense.note ? ` (${expense.note})` : ""}
+            </Text>
           ))}
         </View>
       </View>
