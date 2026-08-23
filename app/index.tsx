@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button, Keyboard, Pressable, Text, TextInput, View, ScrollView } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 type Expense = {
   amount: string;
   category: string;
@@ -7,12 +9,28 @@ type Expense = {
 };
 
 const CATEGORIES = ["Food", "Transport", "Fun", "Other"];
+const STORAGE_KEY = "expenses";
 
 export default function Index() {
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState(CATEGORIES[0]);
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [note, setNote] = useState("");
+
+  useEffect(() => {
+    loadExpenses();
+  }, []);
+
+  async function loadExpenses() {
+    const stored = await AsyncStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      setExpenses(JSON.parse(stored));
+    }
+  }
+
+  useEffect(() => {
+    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(expenses));
+  }, [expenses]);
 
   function addExpense() {
     if (amount.trim() === "") {
