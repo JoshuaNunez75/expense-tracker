@@ -102,11 +102,25 @@ export default function Index() {
       <Text style={{ fontSize: 18, fontWeight: "700", marginTop: 20 }}>
         Total: ${total.toFixed(2)}
       </Text>
-      <View style={{ marginTop: 20 }}>
+      <View style={{ marginTop: 20, width: "100%" }}>
         {expenses.map((expense, index) => (
-          <Text key={index}>
-            ${expense.amount} - {expense.category}{expense.note ? ` (${expense.note})` : ""}
-          </Text>
+          <View
+            key={index}
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              width: "100%",
+              paddingVertical: 4,
+            }}
+          >
+            <Text>
+              ${expense.amount} - {expense.category}{expense.note ? ` (${expense.note})` : ""}
+            </Text>
+            <Pressable onPress={() => deleteExpense(index)}>
+              <Text style={{ color: "red", marginLeft: 10 }}>✕</Text>
+            </Pressable>
+          </View>
         ))}
       </View>
     </ScrollView>
