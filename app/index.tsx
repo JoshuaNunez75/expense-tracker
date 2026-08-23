@@ -42,6 +42,13 @@ export default function Index() {
     Keyboard.dismiss();
   }
 
+  
+  function deleteExpense(indexToDelete: number) {
+    setExpenses(expenses.filter((_, index) => index !== indexToDelete));
+  }
+
+  const total = expenses.reduce((sum, expense) => sum + parseFloat(expense.amount), 0);
+
   return (
     <ScrollView
       contentContainerStyle={{ flexGrow: 1, alignItems: "center", padding: 20, paddingTop: 60 }}
@@ -92,6 +99,9 @@ export default function Index() {
 
       <Button title="Add Expense" onPress={addExpense} />
 
+      <Text style={{ fontSize: 18, fontWeight: "700", marginTop: 20 }}>
+        Total: ${total.toFixed(2)}
+      </Text>
       <View style={{ marginTop: 20 }}>
         {expenses.map((expense, index) => (
           <Text key={index}>
